@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-    <h2>benvenuto in amministrazione</h2>
-    <h1>{{$username}}</h1>
+    <div class="container">
+        <h2 class="text-success">Benvenuto nel pannello amministrativo</h2>
+        <h1 class="text-primary">{{$username}}</h1>
+    </div>
 @endsection
