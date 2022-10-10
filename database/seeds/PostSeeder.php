@@ -14,7 +14,7 @@ class PostSeeder extends Seeder
     {
         $faker = \Faker\Factory::create();
 
-        for($i=0; $i<10; $i++) {
+        for($i=0; $i<5; $i++) {
             $newPost = new Post();
 
             $newPost->slug = $faker->word();

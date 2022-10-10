@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Admin\Post;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Str;
 class PostController extends Controller
 {
     /**
@@ -39,15 +39,19 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'slug' => 'required|max:50',
             'title' => 'required|max:255',
             'description' => 'required'
         ]);
-
         $data = $request->all();
+
         $newPost = new Post();
         $newPost->fill($data);
+        
+        $slug = $this->getSlug($newPost->title);
+        $newPost->slug = $slug;
+
         $newPost->save();
+
         return redirect()->route('posts.index')->with('created', 'Creazione avvenuta con successo');
     }
 
@@ -83,15 +87,34 @@ class PostController extends Controller
     public function update(Request $request, Post $post)
     {
         $request->validate([
-            'slug' => 'required|max:50',
             'title' => 'required|max:255',
             'description' => 'required'
         ]);
-
         $data = $request->all();
+
+        if ($post->title !== $data['title']) {
+            $data['slug'] = $this->getSlug($data['title']);
+        }
+
         $post->update($data);
-        $post->save();
+
         return redirect()->route('posts.index')->with('edited', 'Modifiche apportate correttamente');
+    }
+
+
+    protected function getSlug($title) 
+    {
+        $slug = Str::slug($title, '-');
+        $checkSlug = Post::where('slug', $slug)->first();
+        $counter = 1;
+
+        while($checkSlug) {
+            $slug = Str::slug($title . '-' . $counter, '-');
+            $counter++;
+            $checkSlug = Post::where('slug', $slug)->first();
+        }
+
+        return $slug;
     }
 
     /**
@@ -106,4 +129,6 @@ class PostController extends Controller
         
         return redirect()->route('posts.index')->with('cancelled', 'Eliminazione avvvenuta con successo');
     }
+
+    
 }

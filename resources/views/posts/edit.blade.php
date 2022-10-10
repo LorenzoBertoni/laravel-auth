@@ -2,16 +2,10 @@
 
 @section('content')
     <div class="container">
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-        <form action="{{route('posts.update', ['post' => $post])}}" method="POST">
+        <form 
+        action="{{route('posts.update', ['post' => $post])}}" 
+        method="POST"
+        >
             @csrf
             @method('PUT')
 
@@ -24,16 +18,12 @@
                 name="title"
                 value="{{old('title', $post->title)}}"
                 >
+
+                @error('title')
+                    <div class="alert alert-danger">{{ $message }}</div>
+                @enderror
             </div>
-            <div class="mb-3">
-                <label for="slug" class="form-label">Slug</label>
-                <input 
-                type="text" 
-                class="form-control"
-                id="slug"
-                name="slug"
-                value="{{old('slug', $post->slug)}}">
-            </div>
+            
             <div class="mb-3">
                 <label for="description">Description</label>
                 <textarea 
@@ -43,9 +33,15 @@
                 >
                     {{old('description', $post->description)}}
                 </textarea>
+
+                @error('description')
+                    <div class="alert alert-danger">{{ $message }}</div>
+                @enderror
             </div>
-            <button type="submit" class="btn btn-primary">Applica Modifiche</button>
+
+            <button type="submit" class="btn btn-primary">
+                Applica Modifiche
+            </button>
         </form>
     </div>
-    
 @endsection

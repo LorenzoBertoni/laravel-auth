@@ -38,30 +38,29 @@
                         <th scope="row">{{$post->id}}</th>
                         <td>{{$post->title}}</td>
                         <td>{{$post->slug}}</td>
-                        <td class="actions">
+                        <td class="actions p-2 d-flex justify-content-center align-items-center">
                             <a 
                             href="{{route('posts.show', ['post' => $post])}}"
-                            class="btn btn-primary"
+                            class="btn btn-primary ml-3"
                             >
                                 Vedi Info
                             </a>
                             <a 
                             href="{{route('posts.edit', ['post' => $post])}}"
-                            class="btn btn-warning"
+                            class="btn btn-warning ml-3"
                             >
                                 Modifica
                             </a>
                             <form 
                             action="{{route('posts.destroy', ['post' => $post])}}"
                             method="POST"
-                            class="mt-2 ms-2"
                             >
                                 @csrf
                                 @method('DELETE')
 
                                 <button 
                                 type="submit"
-                                class="btn btn-danger"
+                                class="btn btn-danger ml-3"
                                 onclick="return confirm('L\'eliminazione dei dati è permanente. Confermando eliminerai l\'elemento selezionato. Desideri procedere?')"
                                 >
                                     Elimina
