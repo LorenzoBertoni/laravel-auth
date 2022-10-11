@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Admin\Post;
+use App\Post;
+use App\Category;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -27,7 +28,9 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('posts.create');
+        $categories = Category::all();
+
+        return view('posts.create', ['categories' => $categories]);
     }
 
     /**
@@ -40,7 +43,8 @@ class PostController extends Controller
     {
         $request->validate([
             'title' => 'required|max:255',
-            'description' => 'required'
+            'description' => 'required',
+            'category_id' => 'nullable|exists:categories,id'
         ]);
         $data = $request->all();
 
@@ -104,6 +108,7 @@ class PostController extends Controller
 
     protected function getSlug($title) 
     {
+        //**Crea uno slug univoco per ogni titolo */
         $slug = Str::slug($title, '-');
         $checkSlug = Post::where('slug', $slug)->first();
         $counter = 1;
